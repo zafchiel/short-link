@@ -12,7 +12,8 @@ export default function FormComponent() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    await kv.set("url", inputUrl)
+    const res = await kv.set("url", inputUrl)
+    console.log(res)
   }
 
   useEffect(() => {}, [])
