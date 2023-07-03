@@ -6,53 +6,33 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "./ui/dropdown-menu"
+import { useCallback, useRef } from "react"
+import { downloadBlob } from "@/lib/downloadBlob"
 
 export default function QRcode({ url }: { url: string }) {
-  const { SVG, Canvas } = useQRCode()
+  const { SVG } = useQRCode()
+  const svgRef = useRef<HTMLDivElement | null>(null)
 
-  //   const downloadQRcode = async (size: number) => {
-  //     const svg = document.getElementsByTagName("svg")[1]
-  //     console.log(svg)
+  // const downloadCanva = () => {
+  //   const canva = document.getElementsByTagName("canvas")[0]
+  //   const link = document.createElement("a")
+  //   link.download = "filename.png"
+  //   link.href = canva.toDataURL()
+  //   link.click()
+  // }
 
-  //     const svgString = new XMLSerializer().serializeToString(svg)
-  //     const canvas = document.createElement("canvas")
-  //     const ctx = canvas.getContext("2d")
-  //     const DOMURL = self.URL || self.webkitURL || self
-  //     const img = new Image()
-  //     const svgBlob = new Blob([svgString], {
-  //       type: "image/svg+xml;charset=utf-8",
-  //     })
+  const downloadSVG = useCallback(() => {
+    if (svgRef === null) return
 
-  //     const url = DOMURL.createObjectURL(svgBlob)
-  //     img.onload = () => {
-  //       ctx?.drawImage(img, 0, 0)
-  //       const dataUrl = canvas.toDataURL("image/png")
-  //       DOMURL.revokeObjectURL(dataUrl)
-  //       const link = document.createElement("a")
-  //       link.download = "qr"
-  //       link.href = dataUrl
-  //       link.dataset.downloadurl = ["image/png", link.download, link.href].join(
-  //         ":"
-  //       )
-  //       document.body.appendChild(link)
-  //       link.click()
-  //       document.body.removeChild(link)
-  //     }
-  //     img.src = url
-  //   }
-
-  const downloadCanva = () => {
-    const canva = document.getElementsByTagName("canvas")[0]
-    const link = document.createElement("a")
-    link.download = "filename.png"
-    link.href = canva.toDataURL()
-    link.click()
-  }
+    const svg = svgRef.current?.innerHTML
+    const blob = new Blob([svg as string], { type: "image/svg+xml" })
+    downloadBlob(blob, `QRcode.svg`)
+  }, [])
 
   return (
     <>
       <div className="flex flex-col items-center">
-        <div className="min-h-[200px] w-full ">
+        <div ref={svgRef} className="min-h-[200px] w-full">
           <SVG
             text={url}
             options={{
@@ -61,7 +41,14 @@ export default function QRcode({ url }: { url: string }) {
             }}
           />
         </div>
-        <DropdownMenu>
+        <Button
+          onClick={downloadSVG}
+          variant="outline"
+          className="w-full rounded-t-none font-semibold uppercase"
+        >
+          download
+        </Button>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger className="w-full">
             <Button
               variant="outline"
@@ -71,11 +58,17 @@ export default function QRcode({ url }: { url: string }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="flex w-80 items-center justify-around">
-            <DropdownMenuItem>800x800</DropdownMenuItem>
-            <DropdownMenuItem>600x600</DropdownMenuItem>
-            <DropdownMenuItem>400x400</DropdownMenuItem>
+            <DropdownMenuItem onClick={downloadSVG} className="cursor-pointer">
+              800x800
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              600x600
+            </DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">
+              400x400
+            </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
     </>
   )
