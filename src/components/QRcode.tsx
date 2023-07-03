@@ -1,5 +1,11 @@
 import { useQRCode } from "next-qrcode"
-import { createElement } from "react"
+import { Button } from "./ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "./ui/dropdown-menu"
 
 export default function QRcode({ url }: { url: string }) {
   const { SVG, Canvas } = useQRCode()
@@ -45,8 +51,8 @@ export default function QRcode({ url }: { url: string }) {
 
   return (
     <>
-      <div className="flex flex-col items-center md:flex-row">
-        <div className="grow">
+      <div className="flex flex-col items-center">
+        <div className="min-h-[200px] w-full ">
           <SVG
             text={url}
             options={{
@@ -55,12 +61,21 @@ export default function QRcode({ url }: { url: string }) {
             }}
           />
         </div>
-        <div className="flex h-full items-center justify-between rounded-r-md border p-2 md:flex-col">
-          <p className="text-l font-semibold uppercase">Download</p>
-          <p>600x600</p>
-          <p>400x400</p>
-          <p>200x200</p>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="w-full">
+            <Button
+              variant="outline"
+              className="w-full rounded-t-none font-semibold uppercase"
+            >
+              download
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="flex w-80 items-center justify-around">
+            <DropdownMenuItem>800x800</DropdownMenuItem>
+            <DropdownMenuItem>600x600</DropdownMenuItem>
+            <DropdownMenuItem>400x400</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </>
   )
