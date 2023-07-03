@@ -6,28 +6,31 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "./ui/dropdown-menu"
-import { useCallback, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { downloadBlob } from "@/lib/downloadBlob"
+import { Canvg } from "canvg"
 
 export default function QRcode({ url }: { url: string }) {
   const { SVG } = useQRCode()
   const svgRef = useRef<HTMLDivElement | null>(null)
 
-  // const downloadCanva = () => {
-  //   const canva = document.getElementsByTagName("canvas")[0]
-  //   const link = document.createElement("a")
-  //   link.download = "filename.png"
-  //   link.href = canva.toDataURL()
-  //   link.click()
-  // }
-
-  const downloadSVG = useCallback(() => {
-    if (svgRef === null) return
-
+  const handleDownload = async (size: number) => {
     const svg = svgRef.current?.innerHTML
-    const blob = new Blob([svg as string], { type: "image/svg+xml" })
-    downloadBlob(blob, `QRcode.svg`)
-  }, [])
+      .replace("<div>", "")
+      .replace("</div>", "") as string
+
+    const canvas = document.createElement("canvas")
+    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
+
+    const cvg = Canvg.fromString(ctx, svg)
+    cvg.resize(size, size)
+    await cvg.render()
+
+    const link = document.createElement("a")
+    link.download = "qrCode.png"
+    link.href = canvas.toDataURL()
+    link.click()
+  }
 
   return (
     <>
@@ -41,15 +44,8 @@ export default function QRcode({ url }: { url: string }) {
             }}
           />
         </div>
-        <Button
-          onClick={downloadSVG}
-          variant="outline"
-          className="w-full rounded-t-none font-semibold uppercase"
-        >
-          download
-        </Button>
-        {/* <DropdownMenu>
-          <DropdownMenuTrigger className="w-full">
+        <DropdownMenu>
+          <DropdownMenuTrigger className="w-full" asChild>
             <Button
               variant="outline"
               className="w-full rounded-t-none font-semibold uppercase"
@@ -58,17 +54,26 @@ export default function QRcode({ url }: { url: string }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="flex w-80 items-center justify-around">
-            <DropdownMenuItem onClick={downloadSVG} className="cursor-pointer">
-              800x800
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => handleDownload(600)}
+              className="cursor-pointer"
+            >
               600x600
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => handleDownload(400)}
+              className="cursor-pointer"
+            >
               400x400
             </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => handleDownload(200)}
+              className="cursor-pointer"
+            >
+              200x200
+            </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu> */}
+        </DropdownMenu>
       </div>
     </>
   )
