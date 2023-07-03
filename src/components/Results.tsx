@@ -18,10 +18,19 @@ export default function Results({ shortUrl, originalUrl }: Props) {
   const [isTooltipOpen, setisTooltipOpen] = useState(true)
 
   useEffect(() => {
-    setTimeout(() => {
-      setisTooltipOpen(false)
-    }, 2000)
-  }, [])
+    const copyShortLink = async () => {
+      try {
+        await navigator.clipboard.writeText(shortUrl)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setTimeout(() => {
+          setisTooltipOpen(false)
+        }, 2000)
+      }
+    }
+    copyShortLink()
+  }, [shortUrl])
   return (
     <TooltipProvider>
       <Card className="m-3 p-3">
