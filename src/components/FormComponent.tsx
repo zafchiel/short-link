@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ChangeEvent, FormEvent, useEffect, useState } from "react"
-import Link from "next/link"
+import { ChangeEvent, FormEvent, useState } from "react"
+import Results from "./Results"
 
 export default function FormComponent() {
   const [inputUrl, setInputUrl] = useState<string>("")
-  const [shortenedUrl, setshortenedUrl] = useState<string>("")
+  const [shortenedUrl, setshortenedUrl] = useState<URL | null>(null)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -21,13 +21,13 @@ export default function FormComponent() {
         body: JSON.stringify({ url: inputUrl }),
       })
       const data = await res.json()
-      setshortenedUrl(window.location.origin + "/" + data.alias)
+      const url = new URL(window.location.origin)
+      url.pathname = "/" + data.alias
+      setshortenedUrl(url)
     } catch (error) {
       console.log(error)
     }
   }
-
-  useEffect(() => {}, [])
 
   return (
     <>
@@ -49,13 +49,9 @@ export default function FormComponent() {
           </Button>
         </div>
       </form>
-      <div className="flex items-center justify-center p-3">
-        <Link href={shortenedUrl} passHref>
-          <h3 className="cursor-pointer text-xl font-bold underline">
-            {shortenedUrl}
-          </h3>
-        </Link>
-      </div>
+      {shortenedUrl && (
+        <Results shortUrl={shortenedUrl.toString()} originalUrl={inputUrl} />
+      )}
     </>
   )
 }
