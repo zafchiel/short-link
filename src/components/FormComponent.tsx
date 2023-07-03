@@ -12,6 +12,7 @@ import {
 } from "react"
 import Results from "./Results"
 import { useToast } from "./ui/use-toast"
+import { Link } from "lucide-react"
 
 export default function FormComponent() {
   const [inputUrl, setInputUrl] = useState<string>("")
@@ -67,7 +68,7 @@ export default function FormComponent() {
             className="rounded-r-none"
           />
           <Button type="submit" className="rounded-l-none">
-            Create
+            <Link />
           </Button>
         </div>
       </form>

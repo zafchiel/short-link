@@ -6,8 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "./ui/dropdown-menu"
-import { useCallback, useEffect, useRef } from "react"
-import { downloadBlob } from "@/lib/downloadBlob"
+import { useRef } from "react"
 import { Canvg } from "canvg"
 
 export default function QRcode({ url }: { url: string }) {
