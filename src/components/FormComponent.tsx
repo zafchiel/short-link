@@ -17,6 +17,7 @@ import { Link } from "lucide-react"
 export default function FormComponent() {
   const [inputUrl, setInputUrl] = useState<string>("")
   const [shortenedUrl, setshortenedUrl] = useState<URL | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const inputRef: MutableRefObject<HTMLInputElement | null> = useRef(null)
 
@@ -34,6 +35,8 @@ export default function FormComponent() {
       return
     }
 
+    setIsLoading(true)
+
     try {
       const res = await fetch("/api/newAlias", {
         method: "POST",
@@ -48,11 +51,13 @@ export default function FormComponent() {
       setshortenedUrl(url)
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
-    <>
+    <div className="flex h-full w-full flex-col">
       <form onSubmit={handleSubmit}>
         <Label htmlFor="url">Paste your link here</Label>
         <div className="flex">
@@ -72,9 +77,11 @@ export default function FormComponent() {
           </Button>
         </div>
       </form>
-      {shortenedUrl && (
-        <Results shortUrl={shortenedUrl.toString()} originalUrl={inputUrl} />
-      )}
-    </>
+      <Results
+        shortUrl={shortenedUrl?.toString()}
+        originalUrl={inputUrl}
+        isLoading={isLoading}
+      />
+    </div>
   )
 }

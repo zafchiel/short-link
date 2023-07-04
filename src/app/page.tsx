@@ -9,7 +9,7 @@ export default function Home() {
       <main className="flex h-screen w-full flex-col items-center justify-start px-3 py-10">
         <Heading />
 
-        <section className="mt-10 w-full max-w-md">
+        <section className="w-full max-w-md grow">
           <FormComponent />
         </section>
       </main>
