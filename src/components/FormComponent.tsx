@@ -13,6 +13,7 @@ import {
 import Results from "./Results"
 import { useToast } from "./ui/use-toast"
 import { Link } from "lucide-react"
+import { Skeleton } from "./ui/skeleton"
 
 export default function FormComponent() {
   const [inputUrl, setInputUrl] = useState<string>("")
@@ -77,11 +78,11 @@ export default function FormComponent() {
           </Button>
         </div>
       </form>
-      <Results
-        shortUrl={shortenedUrl?.toString()}
-        originalUrl={inputUrl}
-        isLoading={isLoading}
-      />
+      {isLoading ? (
+        <Skeleton className="m-2 h-full" />
+      ) : (
+        <Results shortUrl={shortenedUrl?.toString()} originalUrl={inputUrl} />
+      )}
     </div>
   )
 }
