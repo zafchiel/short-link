@@ -52,7 +52,7 @@ export default function QRcode({ url }: { url: string }) {
               download
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="flex w-80 items-center justify-around">
+          <DropdownMenuContent className="flex min-w-[120px] items-center justify-around">
             <DropdownMenuItem
               onClick={() => handleDownload(600)}
               className="cursor-pointer"
