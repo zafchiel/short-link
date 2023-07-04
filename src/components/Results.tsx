@@ -38,7 +38,7 @@ export default function Results({ shortUrl, originalUrl }: Props) {
           <Tooltip defaultOpen={true} open={isTooltipOpen}>
             <TooltipTrigger>
               <Link href={shortUrl} passHref>
-                <h3 className="cursor-pointer text-xl font-bold underline">
+                <h3 className="cursor-pointer break-all text-sm font-bold underline sm:text-xl">
                   {shortUrl}
                 </h3>
               </Link>
