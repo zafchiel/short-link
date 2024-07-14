@@ -17,7 +17,7 @@ export default function Results({ shortUrl, originalUrl }: Props) {
 				<ShortLink shortUrl={shortUrl} />
 			</CardHeader>
 			<CardContent className="p-2">
-				<QRcode url={originalUrl} />
+				<QRcode url={shortUrl} />
 			</CardContent>
 		</Card>
 	);
