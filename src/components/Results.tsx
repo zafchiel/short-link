@@ -1,7 +1,6 @@
 import QRcode from "./QRcode";
 import ShortLink from "./ShortLink";
 import { Card, CardContent, CardHeader } from "./ui/card";
-import { Skeleton } from "./ui/skeleton";
 
 interface Props {
 	shortUrl: string | undefined;
